@@ -12,7 +12,7 @@ class BarcodeScanner:
         self.last_scan_time = time.time()
 
     def initialize_camera(self):
-        # Accesses the camera. If Camera is not connected, program will fail here.
+        # Accesses the camera.
         self.cap = cv2.VideoCapture(self.capture_device)
         if not self.cap.isOpened():
             raise Exception("Error: Could not open camera.")
