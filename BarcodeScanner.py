@@ -1,7 +1,9 @@
 class BarcodeScanner:
-    def __init__(self, database, capture_device=0):
+    def __init__(self, database, capture_device=0, delay=1):
+        # The delay value specifies how long the camera waits between each scan
         self.database = database
         self.capture_device = capture_device
+        self.delay = delay  # Delay in seconds between scans
         self.cap = None
         self.last_scan_time = time.time()
 
@@ -28,6 +30,13 @@ class BarcodeScanner:
         else:
             print("Could not find any barcode.")
 
+    def scanner_delay(self):
+        current_time = time.time()
+        if current_time - self.last_scan_time >= self.delay:
+            self.last_scan_time = current_time
+            return True
+        return False
+
     def run(self):
         self.initialize_camera()
         print("Press 'q' to quit the program.")
@@ -37,11 +46,8 @@ class BarcodeScanner:
                 print("Error: Could not read frame.")
                 break
             cv2.imshow('Barcode Scanner', frame)
-            current_time = time.time()
-            if current_time - self.last_scan_time >= 1:
-                if frame is not None:
-                    self.process_barcodes_from_image(frame)
-                    self.last_scan_time = current_time
+            if self.scanner_delay():
+                self.process_barcodes_from_image(frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
         self.cap.release()
