@@ -1,15 +1,17 @@
-import time
 import cv2
+import time
 import zxingcpp
+import socket
+import json
 
 class BarcodeScanner:
-    def __init__(self, database, capture_device=0, delay=1):
+    def __init__(self, capture_device=0, delay=1):
         # The delay value specifies how long the camera waits between each scan
-        self.database = database # This value is a relic from the previous version, should probably be removed or changed
         self.capture_device = capture_device
         self.delay = delay  # Delay in seconds between scans
         self.cap = None
         self.last_scan_time = time.time()
+        self.running = False
 
     def initialize_camera(self):
         # Accesses the camera.
@@ -27,8 +29,34 @@ class BarcodeScanner:
                       f'\n Format:   {result.format}'
                       f'\n Content:  {result.content_type}'
                       f'\n Position: {result.position}')
+                barcode_info = [result.text, '+']
+                self.send_barcode(barcode_info)
+                self.write_barcode_text_to_file(result.text)
         else:
             print("Could not find any barcode.")
+
+    def send_barcode(self, barcode):
+        """Deze functie stuurt een barcode naar de database-server"""
+        HOST = "10.0.1.151"
+        PORT = 65432
+
+        barcode_str = json.dumps(barcode)
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((HOST, PORT))
+            # Barcode via encode omzetten naar byte-format. Dit is nodig omdat je alleen bytes kunt versturen.
+            s.sendall(barcode_str.encode('utf-8'))
+            print("Barcode verstuurd!")
+            data = s.recv(1024)
+            print(data.decode())
+            # print(f"Received data")
+
+    def write_barcode_text_to_file(self, text, filename='barcode_logbook.txt'):
+        try:
+            with open(filename, 'a') as file:
+                timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
+                file.write(f"{timestamp}: {text}\n")
+        except IOError as e:
+            print(f"Error writing to file: {e}")
 
     def scanner_delay(self):
         # Adds a delay to the scanner to prevent repeated scans of the same product.
@@ -39,10 +67,10 @@ class BarcodeScanner:
         return False
 
     def run(self):
-        # Main loop
+        # Main loop for capturing and processing frames
+        self.running = True
         self.initialize_camera()
-        print("Press 'q' to quit the program.")
-        while True:
+        while self.running:
             ret, frame = self.cap.read()
             if not ret:
                 print("Error: Could not read frame.")
@@ -54,8 +82,3 @@ class BarcodeScanner:
                 break
         self.cap.release()
         cv2.destroyAllWindows()
-
-if __name__ == "__main__":
-    database = {}  # Placeholder for your database
-    scanner = BarcodeScanner(database)
-    scanner.run()
