@@ -24,7 +24,7 @@ class BarcodeScannerApp:
 
     def stop_scanner(self):
         if self.scanner.running:
-            self.scanner.stop()
+            self.scanner.running = False
             self.scanner_thread.join()
 
     def on_closing(self):
