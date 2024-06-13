@@ -44,7 +44,42 @@ def check_existence(folder_name, file_name):
         
     return folder_existence, log_existence
 
-def write_to_log_file(sender_ip, barcode, change_type):
+def write_to_log_file(sender_ip, barcode, change_type, ex):
+    """
+    Deze functie schrijft na een verbinding de volgende gegevens naar de log file (log.txt):
+    - IP-adress zender
+    - tijdstip waarop het bericht ontvangen is van de zender
+    - de barcode die is verstuurd
+    - het type mutatie
+    """
+    if ex == True:
+        date_time = str(datetime.now())
+        time_received = "Tijdstip: " + date_time + "\n"
+        ip_received = "IP zender: " + sender_ip + "\n"
+        barcode_received = "Barcode: " + barcode + "\n"
+        mutation_received = "Type verandering: " + change_type + "\n"
+        process_status = "Wijziging succesvol verwerkt in de database\n"
+    if ex == False:
+        date_time = str(datetime.now())
+        time_received = "Tijdstip: " + date_time + "\n"
+        ip_received = "IP zender: " + sender_ip + "\n"
+        barcode_received = "Barcode: " + barcode + "\n"
+        mutation_received = "Type verandering: " + change_type + "\n"
+        process_status = "Wijziging niet verwerkt in de database: barcode komt niet in de database voor\n"
+    
+    file_name = create_filename()
+    folder, log = check_existence("scan_logs", file_name)
+
+    log_file = os.path.join("C://scan_logs", file_name)
+    with open(log_file, 'a') as file_object:
+        file_object.write("\nBarcode ontvangen: \n")
+        file_object.write(ip_received)
+        file_object.write(time_received)
+        file_object.write(barcode_received)
+        file_object.write(mutation_received)
+        file_object.write(process_status)
+    
+def write_to_log_database_offline(sender_ip, barcode, change_type):
     """
     Deze functie schrijft na een verbinding de volgende gegevens naar de log file (log.txt):
     - IP-adress zender
@@ -57,6 +92,7 @@ def write_to_log_file(sender_ip, barcode, change_type):
     ip_received = "IP zender: " + sender_ip + "\n"
     barcode_received = "Barcode: " + barcode + "\n"
     mutation_received = "Type verandering: " + change_type + "\n"
+    process_status = "Database offline: wijziging niet verwerkt in database \n"
 
     
     file_name = create_filename()
@@ -69,8 +105,7 @@ def write_to_log_file(sender_ip, barcode, change_type):
         file_object.write(time_received)
         file_object.write(barcode_received)
         file_object.write(mutation_received)
-    
-
+        file_object.write(process_status)
 
 
 
@@ -83,8 +118,8 @@ def write_to_log_file(sender_ip, barcode, change_type):
 # for i in range(1, 10000):
 #    write_to_log_file()
 
-write_to_log_file("10.0.1.152", "9781119149224", "+")
-for i in range (1, 4):
-    write_to_log_file("10.0.1.151", "9781119149224", "-")
-for i in range (1, 4):
-    write_to_log_file("10.0.1.152", "9781119149224", "+")
+# write_to_log_file("10.0.1.152", "9781119149224", "+")
+# for i in range (1, 4):
+#    write_to_log_file("10.0.1.151", "9781119149224", "-")
+# for i in range (1, 4):
+#    write_to_log_file("10.0.1.152", "9781119149224", "+")
