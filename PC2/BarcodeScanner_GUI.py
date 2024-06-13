@@ -33,7 +33,7 @@ class BarcodeScannerApp:
         self.delay_label.place(relx=0.1, rely=0.5, anchor=tk.W)
 
         # Add a button to open/close the text file viewer
-        self.toggle_text_button = tk.Button(self.root, text="Toggle Text File Viewer", command=self.toggle_text_window)
+        self.toggle_text_button = tk.Button(self.root, text="Toggle Scanner Log", command=self.toggle_text_window)
         self.toggle_text_button.place(relx=0.1, rely=0.6, anchor=tk.W)
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
