@@ -57,7 +57,7 @@ class BarcodeScannerApp:
             # Load and display the content of barcode_text.txt
             self.update_text_widget()
 
-            # Schedule periodic refresh every 3 seconds
+            # Schedule periodic refresh every second
             self.schedule_text_widget_update()
 
     def update_text_widget(self):
@@ -77,12 +77,14 @@ class BarcodeScannerApp:
             self.text_window.after(1000, self.schedule_text_widget_update)
 
     def prompt_for_delay(self):
+        # Add option to change the time between scans
         delay = simpledialog.askinteger("Input", "Enter scan delay in seconds:", minvalue=1, maxvalue=60)
         if delay is not None:
             self.scanner.delay = delay
             self.delay_label.config(text=f"Current Delay: {self.scanner.delay} seconds")  # Update the delay label
 
     def center_window(self, window, width, height):
+        # Places the menu window in the center of the screen
         window.update_idletasks()
         x = (window.winfo_screenwidth() // 2) - (width // 2)
         y = (window.winfo_screenheight() // 2) - (height // 2)
