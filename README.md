@@ -16,3 +16,5 @@ BarcodeScanner_GUI.py bevat de grafische interface dat het programma toegankelij
 LET OP: Naast het downloaden van de bestanden moet ook een logboek-bestand aangemaakt worden VOORDAT je het programma start, onder de naam 'barcode_logbook.txt', dat in dezelfde folder geplaatst moet worden. 
 
 LET OP: Het programma voegt gescande producten toe aan de Database door middel van een '+' in de functie 'handle_barcode_info' in BarcodeScanner.py, op lijn 40. Als het programma juist gescande producten moet weghalen uit de Database, verander dan de '+' in een '-'.
+
+Gebruikte modules: Cv2, zxingcpp, socket, time, os, json, tkinter, threading
