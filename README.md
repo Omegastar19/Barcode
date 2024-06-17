@@ -45,5 +45,5 @@ Python
 - zxingcpp
 - socket
 - time
-- tkinter as tk (messagebox, simpledialog)
+- tkinter (messagebox, simpledialog)
 - threading
