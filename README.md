@@ -10,14 +10,15 @@ Het doel van dit project is om een voorraadsysteem te ontwerpen en te bouwen. He
 Wanneer pc_y of pc_z een artikel gescand heeft, dan stuurt deze pc de barcode door naar pc_x. Vervolgens voert pc_x de mutatie in de mySQL database door. Omdat pc_y en pc_z gelijktijdig scannen en informatie doorsturen, wordt pc_x gebouwd als een multi-connection server. Alle wijzigingen die in de database worden opgeslagen, worden ook automatisch gedocumenteerd in een logboek. Er worden aparte logboeken bijgehouden op pc_x, pc_y en pc_z. 
 
 # Gebruiksaanwijzing:
-Voor pc_x:
+
+**Voor pc_x:**
 Hiervoor is het nodig om XAMPP te installeren op de PC. Om de database te kunnen gebruiken, moet de gebruiker via XAMPP zowel de Apache app als de MySQL app starten. 
 Verder zijn de volgende drie bestanden nodig (en dienen in dezelfde map opgeslagen te worden):
 - article_database.py
 - try_except_multi_connection_versie.py
 - writing_to_txt.py
 
-Voor pc_y (en pc_z):
+**Voor pc_y (en pc_z):**
 PC2 bevat 3 bestanden die van elkaar afhankelijk zijn en dus samen in een folder geplaatst moeten worden.
 
 Main.py bevat de main loop waarmee je het programma start.
